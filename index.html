@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دعوة مناورة الكباتن</title>
+    <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #d4af37; }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; min-height: 100vh;
+            /* أولاً: تثبيت الخلفية تماماً ومنع حركتها عند النزول */
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
+                        url('https://i.postimg.cc/0NZ7hwJh/ma.jpg') no-repeat center center/cover;
+            background-attachment: fixed; /* هذا السطر يثبت الصورة */
+            font-family: 'Aref Ruqaa', serif;
+            color: white; overflow-x: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .container {
+            width: 94%; max-width: 500px;
+            margin: 10px auto; text-align: center;
+            padding: 20px 10px;
+            background: rgba(0, 0, 0, 0.1); 
+            border-radius: 30px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .players-row { display: flex; justify-content: space-around; align-items: center; margin: 10px 0; }
+        .player { width: 42%; }
+        .player img { width: 100%; border-bottom: 3px solid var(--gold); border-radius: 15px; }
+        .vs { font-size: 3rem; color: var(--gold); }
+
+        /* ثانياً: قلب العداد ليكون الثواني في أقصى اليمين */
+        .timer-section {
+            display: flex; 
+            flex-direction: row; /* جعل الاتجاه من اليمين لليسار */
+            justify-content: center; gap: 12px;
+            margin: 10px 0 20px 0; background: rgba(255, 255, 255, 0.05);
+            padding: 8px; border-radius: 12px;
+        }
+        .t-unit { display: flex; flex-direction: column; width: 50px; }
+        .t-unit span { font-size: 1.3rem; color: var(--gold); font-weight: bold; }
+        .t-unit label { font-size: 0.6rem; opacity: 0.8; }
+
+        h1 { font-size: clamp(2.8rem, 12vw, 4.2rem); margin: 0; color: var(--gold); line-height: 1; }
+        .highlight { font-size: clamp(1.2rem, 5vw, 1.6rem); color: white; margin-bottom: 5px; }
+        .details { font-size: clamp(1rem, 4vw, 1.2rem); line-height: 1.6; margin: 10px 0; }
+
+        .btns { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+        .btn {
+            padding: 15px; border-radius: 12px; text-decoration: none;
+            font-weight: bold; font-size: 1.2rem; transition: 0.3s;
+            border: none; cursor: pointer; font-family: 'Aref Ruqaa', serif;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .btn-map { background: var(--gold); color: black; }
+        .btn-share { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
+
+        .footer-signature { margin-top: 20px; font-size: 0.8rem; opacity: 0.5; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="highlight">جـاااااهـزيـن يـاعـريـس 🔥</div>
+    <div style="font-size: 1rem; opacity: 0.7;">O15 ACADEMY</div>
+
+    <div class="players-row">
+        <div class="player"><img src="https://i.postimg.cc/d3g24cTM/kh.jpg" alt="خالد"></div>
+        <div class="vs">VS</div>
+        <div class="player"><img src="https://i.postimg.cc/Hnr0wkjm/mo.jpg" alt="ماجد"></div>
+    </div>
+
+    <div class="timer-section">
+        <div class="t-unit"><span id="s">00</span><label>ثانية</label></div>
+        <div class="t-unit"><span id="m">00</span><label>دقيقة</label></div>
+        <div class="t-unit"><span id="h">00</span><label>ساعة</label></div>
+        <div class="t-unit"><span id="d">00</span><label>يوم</label></div>
+    </div>
+
+    <h1>مناورة</h1>
+    <div class="highlight">أصدقاء خالد العليان × أصدقاء ماجد القربي</div>
+
+    <div class="details">
+        بمناسبة حفل زفاف الكابتن <b style="color:var(--gold)">ماجد القربي</b> <br>
+        بمشاركة مجموعة من النجوم والمشاهير <br>
+        📅 الخميس 26 - 03 - 2026 م <br>
+        🕘 الساعة 9:45 مساءً <br>
+        📍 ملعب أكاديمية O15 - أبحر الجنوبية
+    </div>
+
+    <div class="btns">
+        <a href="http://googleusercontent.com/maps.google.com/9" class="btn btn-map" target="_blank">📍 عرض موقع الملعب (GPS)</a>
+        <button class="btn btn-share" onclick="doShare()">🔗 مشاركة رابط الدعوة</button>
+    </div>
+
+    <div class="footer-signature">تم التصميم بواسطة Y.Y.Y</div>
+</div>
+
+<script>
+    const eventDate = new Date('March 26, 2026 21:45:00').getTime();
+    function updateTimer() {
+        const now = new Date().getTime();
+        const diff = eventDate - now;
+        if (diff > 0) {
+            document.getElementById('d').innerText = Math.floor(diff / 86400000).toString().padStart(2, '0');
+            document.getElementById('h').innerText = Math.floor((diff % 86400000) / 3600000).toString().padStart(2, '0');
+            document.getElementById('m').innerText = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+            document.getElementById('s').innerText = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+        }
+    }
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+    async function doShare() {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'دعوة مناورة الكباتن',
+                    text: 'حياكم الله في حفل زفاف الكابتن ماجد القربي ومناورة النجوم.. ننتظركم! 🔥',
+                    url: window.location.href
+                });
+            } catch (err) { console.log("إلغاء"); }
+        } else {
+            navigator.clipboard.writeText(window.location.href);
+            alert("تم نسخ الرابط لمشاركته يدوياً!");
+        }
+    }
+</script>
+
+</body>
+</html>
+
+
+
